@@ -35,7 +35,7 @@ class OmniFocusLogger < Slogger
       set dteToday to date (short date string of (current date))
       tell application id "com.omnigroup.OmniFocus"
         tell default document
-          set refDoneToday to a reference to (flattened tasks where (completion date ≥ dteToday))
+          set refDoneToday to a reference to (flattened tasks where (completion date >= dteToday))
           set {lstName, lstContext, lstProject} to {name, name of its context, name of its containing project} of refDoneToday
           set strText to ""
           repeat with iTask from 1 to count of lstName
@@ -49,6 +49,9 @@ class OmniFocusLogger < Slogger
       end tell
       return strText
     APPLESCRIPT}
+    if values.is_a? String
+      values = values.gsub(/\r/, "\n").split(/\n/)
+    end
     values.each do |value|
       # Create entries here
       output += "* " + value + "\n"
